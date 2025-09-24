@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  database:
+    build: ./database
+    container_name: auth_db
+    volumes:
+      - db_data:/app/data
+    networks:
+      - auth_network
+
+  backend:
+    build: ./backend
+    container_name: auth_backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=sqlite:///app/data/auth.db
+      - JWT_SECRET=tu_clave_secreta_jwt_2024
+    volumes:
+      - db_data:/app/data
+    networks:
+      - auth_network
+
+  frontend:
+    build: ./frontend
+    container_name: auth_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:5000
+    networks:
+      - auth_network
+
+volumes:
+  db_data:
+
+networks:
+  auth_network:
+    driver: bridge

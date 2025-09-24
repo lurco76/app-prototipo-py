@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - {{ role|title }}</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 20px auto; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .user-info { background: #e9ecef; padding: 15px; border-radius: 5px; }
+        .resources { margin: 20px 0; }
+        .resource-item { background: #f8f9fa; padding: 10px; margin: 5px 0; border-left: 4px solid #007bff; }
+        .logout-btn { background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; }
+        .role-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .admin { background: #dc3545; color: white; }
+        .user { background: #28a745; color: white; }
+        .guest { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dashboard</h1>
+        <a href="/logout" class="logout-btn">Cerrar Sesión</a>
+    </div>
+    
+    <div class="user-info">
+        <h3>Bienvenido, {{ username }}!</h3>
+        <p>Rol: <span class="role-badge {{ role }}">{{ role|upper }}</span></p>
+    </div>
+    
+    <div class="resources">
+        <h3>Recursos Disponibles:</h3>
+        {% for resource in resources %}
+            <div class="resource-item">{{ resource }}</div>
+        {% endfor %}
+    </div>
+    
+    {% if error %}
+        <div style="color: red; margin: 20px 0;">{{ error }}</div>
+    {% endif %}
+</body>
+</html>
