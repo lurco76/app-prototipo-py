@@ -199,27 +199,73 @@ docker run --rm --network app-prototipo-py_auth_network \
   bash -c "cd /tests && pip install -r requirements.txt && pytest -v"
 ```
 
-## 🔧 Comandos Útiles
+## 🐳 Comandos Docker-Compose
+
+### Implementar el Proyecto
+```bash
+# Construir e iniciar todos los servicios
+docker-compose up --build
+
+# Iniciar en segundo plano (detached)
+docker-compose up -d --build
+
+# Solo construir sin iniciar
+docker-compose build
+```
+
+### Ver Logs
+```bash
+# Ver logs de todos los servicios
+docker-compose logs
+
+# Ver logs en tiempo real
+docker-compose logs -f
+
+# Ver logs de un servicio específico
+docker-compose logs backend
+docker-compose logs frontend
+docker-compose logs database
+
+# Ver logs con timestamps
+docker-compose logs -t
+```
+
+### Limpiar Contenedores y Volúmenes
+```bash
+# Parar y eliminar contenedores
+docker-compose down
+
+# Eliminar contenedores y volúmenes
+docker-compose down -v
+
+# Eliminar contenedores, volúmenes e imágenes
+docker-compose down -v --rmi all
+
+# Limpiar cache de Docker (sistema completo)
+docker system prune -a
+
+# Limpiar solo volúmenes no utilizados
+docker volume prune
+```
+
+## 🔧 Comandos Útiles Adicionales
 
 ### Gestión de Contenedores
 ```bash
-# Iniciar servicios
-docker-compose up -d
+# Ver estado de servicios
+docker-compose ps
 
-# Ver logs
-docker-compose logs -f
+# Reiniciar un servicio específico
+docker-compose restart backend
 
-# Parar servicios
-docker-compose down
+# Parar servicios sin eliminar
+docker-compose stop
 
-# Reconstruir imágenes
-docker-compose up --build
-
-# Limpiar volúmenes
-docker-compose down -v
+# Iniciar servicios parados
+docker-compose start
 ```
 
-### Debugging
+### Debugging y Acceso a Contenedores
 ```bash
 # Acceder a contenedor de BD
 docker exec -it auth_db bash
@@ -227,8 +273,17 @@ docker exec -it auth_db bash
 # Acceder a contenedor backend
 docker exec -it auth_backend bash
 
+# Acceder a contenedor frontend
+docker exec -it auth_frontend bash
+
 # Ver base de datos
 docker exec -it auth_db sqlite3 /app/data/auth.db ".tables"
+
+# Ver usuarios en la base de datos
+docker exec -it auth_db sqlite3 /app/data/auth.db "SELECT * FROM users;"
+
+# Ejecutar comando en contenedor específico
+docker-compose exec backend python -c "print('Backend funcionando')"
 ```
 
 ## 🛡️ Características de Seguridad
